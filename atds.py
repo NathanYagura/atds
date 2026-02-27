@@ -83,3 +83,126 @@ class Node:
         self.next = new_next
 
 
+class UnorderedList(object):
+
+    def __init__(self):
+        self.head = None
+
+    def is_empty(self):
+        return self.head == None
+
+    def add(self, item):
+        temp = Node(item)
+        temp.set_next(self.head)
+        self.head = temp
+
+    def length(self):
+        node_count = 0
+        current = self.head
+        while current != None:
+            node_count += 1
+            current = current.get_next()
+        return node_count
+
+    def search(self, item):
+        current = self.head
+        while current != None:
+            if current.get_data() == item:
+                return True
+            current = current.get_next()
+        return False
+
+    def remove(self, item):
+        previous = None
+        current = self.head
+        while current != None:
+            if current.get_data() == item:
+                if previous == None:
+                    self.head = current.get_next()
+                else:
+                    previous.set_next(current.get_next())
+                return
+            else:
+                previous = current
+                current = current.get_next()
+
+    def append(self, item):
+        temp = Node(item)
+        if self.head == None:
+            self.head = temp
+        else:
+            current = self.head
+            while current.get_next() != None:
+                current = current.get_next()
+            current.set_next(temp)
+
+    def index(self, item):
+        current = self.head
+        position = 0
+        while current != None:
+            if current.get_data() == item:
+                return position
+            current = current.get_next()
+            position += 1
+
+    def insert(self, pos, item):
+        temp = Node(item)
+        if pos == 0:
+            temp.set_next(self.head)
+            self.head = temp
+        else:
+            current = self.head
+            previous = None
+            position = 0
+            while position < pos:
+                previous = current
+                current = current.get_next()
+                position += 1
+            temp.set_next(current)
+            previous.set_next(temp)
+
+    def pop(self):
+        current = self.head
+        previous = None
+
+        if current == None:
+            return None
+
+        while current.get_next() != None:
+            previous = current
+            current = current.get_next()
+
+        if previous == None:
+            self.head = None
+        else:
+            previous.set_next(None)
+
+        return current.get_data()
+
+
+    def pop_at(self, pos):
+        current = self.head
+        previous = None
+        position = 0
+
+        while position < pos:
+            previous = current
+            current = current.get_next()
+            position += 1
+
+        if previous == None:
+            self.head = current.get_next()
+        else:
+            previous.set_next(current.get_next())
+
+        return current.get_data()
+
+    def __repr__(self):
+        result = "UnorderedList["
+        next_node = self.head
+        while next_node != None:
+            result += str(next_node.get_data()) + ","
+            next_node = next_node.get_next()
+        result = result + "]"
+        return result
+
