@@ -1,12 +1,10 @@
-
 class Stack:
 
     def __init__(self):
         self.items = []
 
     def push(self, item):
-        if len(self.item) > 0:
-            self.items.append(item)
+        self.items.append(item)
 
     def pop(self):
         return self.items.pop()
@@ -20,6 +18,29 @@ class Stack:
     def size(self):
         return len(self.items)
 
+class ULStack:
+
+    def __init__(self):
+        self.items = UnorderedList()
+
+    def is_empty(self):
+        return self.items.is_empty()
+
+    def push(self, item):
+        self.items.add(item)
+
+    def pop(self):
+        if self.is_empty():
+            return None
+        return self.items.pop_at(0)
+
+    def peek(self):
+        if self.is_empty():
+            return None
+        return self.items.head.get_data()
+
+    def size(self):
+        return self.items.length()
 
 class Queue:
 
