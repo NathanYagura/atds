@@ -227,3 +227,92 @@ class UnorderedList(object):
         result = result + "]"
         return result
 
+
+
+class HashTable():
+    
+    def __init__(self, m):
+        self.size = m
+        self.slots = [None] * m
+        self.data = [None] * m
+        self.count = 0
+
+    def __repr__(self):
+        return "Keys:   " + str(self.slots) + "\nValues: " + str(self.data)
+
+    def __len__(self):
+        return self.count
+
+    def hash_function(self, key, size):
+        return key % size
+
+    def rehash(self, old_hash):
+        return (old_hash + 1) % self.size
+
+    def put(self, key, value):
+        hash_value = self.hash_function(key, self.size)
+        if self.slots[hash_value] == None:
+            self.slots[hash_value] = key
+            self.data[hash_value] = value
+            self.count += 1
+        elif self.slots[hash_value] == key:
+            self.data[hash_value] = value
+        else:
+            next_slot = self.rehash(hash_value)
+            while self.slots[next_slot] != None and self.slots[next_slot] != key:
+                next_slot = self.rehash(next_slot)
+            if self.slots[next_slot] == None:
+                self.slots[next_slot] = key
+                self.data[next_slot] = value
+                self.count += 1
+            else:
+                self.data[next_slot] = value
+
+    def get(self, key):
+        start_slot = self.hash_function(key, self.size)
+        position = start_slot
+        while self.slots[position] != None:
+            if self.slots[position] == key:
+                return self.data[position]
+            position = self.rehash(position)
+            if position == start_slot:
+                return None
+        return None
+    
+class BinaryTree:
+
+    def __init__(self, key):
+        self.key = key
+        self.left_child = None
+        self.right_child = None
+
+    def get_root_val(self):
+        return self.key
+
+    def set_root_val(self, new_val):
+        self.key = new_val
+
+    def get_left_child(self):
+        return self.left_child
+
+    def get_right_child(self):
+        return self.right_child
+
+    def insert_left(self, new_left_child):
+        if self.left_child == None:
+            self.left_child = BinaryTree(new_left_child)
+        else:
+            new_tree = BinaryTree(new_left_child)
+            new_tree.left_child = self.left_child
+            self.left_child = new_tree
+
+    def insert_right(self, new_right_child):
+        if self.right_child == None:
+            self.right_child = BinaryTree(new_right_child)
+        else:
+            new_tree = BinaryTree(new_right_child)
+            new_tree.right_child = self.right_child
+            self.right_child = new_tree
+
+    def __str__(self):
+        return "BinaryTree[key=" + str(self.key) + ",left_child=" + str(self.left_child) + ",right_child=" + str(self.right_child) + "]"
