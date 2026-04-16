@@ -11,7 +11,13 @@ from atds import Stack, BinaryTree
 
 
 def build_parse_tree(fpexpr):
-    """Build parse tree using rules from notes."""
+    """Creates a binary tree from the fully-parenthesized
+    expression. We'll do this by pushing the current tree
+    (current_focus) onto a stack when we descend to its 
+    subtree to edit that subtree), then pop the stack
+    to get back to previous parent trees when we've completed
+    filling out the subtree.
+    """
     
     tokens = fpexpr.split()
 
@@ -24,24 +30,20 @@ def build_parse_tree(fpexpr):
     for token in tokens:
 
         if token == "(":
-            # add left child and go down
             current_focus.insert_left("")
             stack.push(current_focus)
             current_focus = current_focus.get_left_child()
 
         elif token in "+-*/":
-            # set operator, go right
             current_focus.set_root_val(token)
             current_focus.insert_right("")
             stack.push(current_focus)
             current_focus = current_focus.get_right_child()
 
         elif token == ")":
-            # go up to parent
             current_focus = stack.pop()
 
         else:
-            # operand: set value and go up
             current_focus.set_root_val(int(token))
             current_focus = stack.pop()
 
@@ -49,16 +51,13 @@ def build_parse_tree(fpexpr):
 
 
 def evaluate(parse_tree):
-    """Evaluate using recursive strategy from notes."""
     
     left = parse_tree.get_left_child()
     right = parse_tree.get_right_child()
 
-    # base case: leaf node
     if left is None and right is None:
         return parse_tree.get_root_val()
 
-    # recursive case
     if parse_tree.get_root_val() == "+":
         return evaluate(left) + evaluate(right)
     elif parse_tree.get_root_val() == "-":

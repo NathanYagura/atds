@@ -227,7 +227,32 @@ class UnorderedList(object):
         result = result + "]"
         return result
 
+class LinearSearcher:
 
+    def search(self, nums, target):
+        for i in range(len(nums)):
+            if nums[i] == target:
+                return i
+        
+        return None
+    
+class BinarySearcher:
+
+    def search(self, nums, target):
+        low = 0
+        high = len(nums) - 1
+
+        while low <= high:
+            mid = (low + high) // 2
+
+            if nums[mid] == target:
+                return mid 
+            elif nums[mid] < target:
+                low = mid + 1 
+            else:
+                high = mid - 1
+
+        return None
 
 class HashTable():
     
