@@ -341,3 +341,71 @@ class BinaryTree:
 
     def __str__(self):
         return "BinaryTree[key=" + str(self.key) + ",left_child=" + str(self.left_child) + ",right_child=" + str(self.right_child) + "]"
+
+
+
+class BinaryHeap():
+
+    def __init__(self):
+        self.heap_list = [0]
+
+    def insert(self, value):
+        self.heap_list.append(value)
+        self.percolate_up(len(self.heap_list) - 1)
+
+    def percolate_up(self, i):
+        while i // 2 > 0:
+            if self.heap_list[i] < self.heap_list[i // 2]:
+                temp = self.heap_list[i]
+                self.heap_list[i] = self.heap_list[i // 2]
+                self.heap_list[i // 2] = temp
+            i = i // 2
+
+    def del_min(self):
+        min_val = self.heap_list[1]
+        self.heap_list[1] = self.heap_list[len(self.heap_list) - 1]
+        self.heap_list.pop()
+        if len(self.heap_list) > 1:
+            self.percolate_down(1)
+
+        return min_val
+
+    def percolate_down(self, i):
+        while (i * 2) < len(self.heap_list):
+            min_child = self.min_child(i)
+
+            if self.heap_list[i] > self.heap_list[min_child]:
+                temp = self.heap_list[i]
+                self.heap_list[i] = self.heap_list[min_child]
+                self.heap_list[min_child] = temp
+
+            i = min_child
+
+    def min_child(self, i):
+        if i * 2 + 1 >= len(self.heap_list):
+            return i * 2
+        else:
+            if self.heap_list[i * 2] < self.heap_list[i * 2 + 1]:
+                return i * 2
+            else:
+                return i * 2 + 1
+
+    def find_min(self):
+        return self.heap_list[1]
+
+    def is_empty(self):
+        return len(self.heap_list) == 1
+
+    def size(self):
+        return len(self.heap_list) - 1
+
+    def build_heap(self, list_of_keys):
+        i = len(list_of_keys) // 2
+        self.heap_list = [0] + list_of_keys[:]
+
+        while i > 0:
+            self.percolate_down(i)
+            i = i - 1
+
+    def __repr__(self):
+        return "BinaryHeap" + str(self.heap_list)
