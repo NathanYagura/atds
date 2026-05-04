@@ -409,3 +409,82 @@ class BinaryHeap():
 
     def __repr__(self):
         return "BinaryHeap" + str(self.heap_list)
+    
+
+class Vertex(object):
+    """Describes a vertex object in terms of a "key" and a
+    dictionary that indicates edges to neighboring vertices with
+    a specified weight.
+    """
+    
+    def __init__(self, key):
+        """Constructs a vertex with a key value and an empty dictionary
+        "connected_to" where we'll store other vertices to which this vertex is connected.
+        """
+        self.id = key
+        self.connected_to = {}   # same idea as "neighbors" in notes
+
+    def add_neighbor(self, neighbor_vertex, weight=0):
+        """Adds a reference to a neighboring Vertex object to the dictionary."""
+        self.connected_to[neighbor_vertex] = weight
+
+    def __repr__(self):
+        """Returns a representation of the vertex and its neighbors."""
+        return str(self.id) + ' connected_to: ' + str([x.id for x in self.connected_to])
+
+    def get_connections(self):
+        """Returns the vertices we're connected to"""
+        return self.connected_to.keys()
+
+    def get_id(self):
+        """Returns the id ("key") for this vertex"""
+        return self.id
+
+    def get_weight(self, neighbor_vertex):
+        """Returns the weight of an edge connecting this vertex with another."""
+        return self.connected_to[neighbor_vertex]
+    
+
+class Graph(object):
+    """Describes the Graph class, which is primarily a dictionary  
+    mapping vertex names to Vertex objects.
+    """
+
+    def __init__(self):
+        """Initializes an empty dictionary of Vertex objects"""
+        self.vertex_dict = {}
+
+    def add_vertex(self, key):
+        """Creates a new vertex and adds it to the graph"""
+        new_vertex = Vertex(key)
+        self.vertex_dict[key] = new_vertex
+        return new_vertex
+
+    def get_vertex(self, key):
+        """Returns the Vertex object if it exists, otherwise None"""
+        return self.vertex_dict.get(key, None)
+
+    def __contains__(self, key):
+        """Allows 'key in graph' syntax"""
+        return key in self.vertex_dict
+
+    def add_edge(self, from_vertex, to_vertex, weight=0):
+        """Adds an edge between two vertices"""
+        # create vertices if they don't exist
+        if from_vertex not in self.vertex_dict:
+            self.add_vertex(from_vertex)
+        if to_vertex not in self.vertex_dict:
+            self.add_vertex(to_vertex)
+
+        # connect them using Vertex method
+        self.vertex_dict[from_vertex].add_neighbor(
+            self.vertex_dict[to_vertex], weight
+        )
+
+    def get_vertices(self):
+        """Returns all vertex keys"""
+        return self.vertex_dict.keys()
+
+    def __iter__(self):
+        """Allows iteration over Vertex objects"""
+        return iter(self.vertex_dict.values())
